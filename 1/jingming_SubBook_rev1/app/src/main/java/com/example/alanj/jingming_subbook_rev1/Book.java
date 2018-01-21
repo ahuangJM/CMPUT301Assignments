@@ -1,5 +1,7 @@
 package com.example.alanj.jingming_subbook_rev1;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.lang.reflect.Array;
@@ -9,9 +11,26 @@ import java.util.ArrayList;
  * Created by AlanJ on 2018-01-20.
  */
 
-public class Book {
+public class Book implements Parcelable {
     private ArrayList<Subscription> book;
     public Book() {}
+
+    protected Book(Parcel in) {
+        book = in.createTypedArrayList(Subscription.CREATOR);
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
+
     public void setBook() {
         this.book = new ArrayList<>();
     }
@@ -44,6 +63,9 @@ public class Book {
         }
         this.book.add(newSubscription);
     }
+    public void removeSubscription(Subscription subscription) {
+        this.book.remove(subscription);
+    }
     public Boolean exists(ArrayList<Subscription> book, Subscription subscription) {
         for (Subscription subscription1 : book) {
             if (subscription.getUuid() == subscription1.getUuid()) {
@@ -51,5 +73,15 @@ public class Book {
             }
         }
         return false;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeTypedList(this.book);
     }
 }

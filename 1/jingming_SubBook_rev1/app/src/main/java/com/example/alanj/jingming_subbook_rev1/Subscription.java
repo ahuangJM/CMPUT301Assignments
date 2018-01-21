@@ -1,17 +1,21 @@
 package com.example.alanj.jingming_subbook_rev1;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
  * Created by AlanJ on 2018-01-20.
  */
 
-public class Subscription {
+public class Subscription implements Parcelable {
     private String uuid;
     private String subscriptionName;
     private String dateStarted;
@@ -19,6 +23,26 @@ public class Subscription {
     private String comments;
 
     public Subscription() {}
+
+    protected Subscription(Parcel in) {
+        uuid = in.readString();
+        subscriptionName = in.readString();
+        dateStarted = in.readString();
+        monthlyCharges = in.readString();
+        comments = in.readString();
+    }
+
+    public static final Creator<Subscription> CREATOR = new Creator<Subscription>() {
+        @Override
+        public Subscription createFromParcel(Parcel in) {
+            return new Subscription(in);
+        }
+
+        @Override
+        public Subscription[] newArray(int size) {
+            return new Subscription[size];
+        }
+    };
 
     public void setUuid(){
         this.uuid = UUID.randomUUID().toString();
@@ -61,11 +85,17 @@ public class Subscription {
     public String getUuid() {
         return this.uuid;
     }
+    public byte[] getUuidB() {
+        return this.uuid.getBytes();
+    }
     public char[] getUuidC() {
         return this.uuid.toCharArray();
     }
     public String getSubscriptionName() {
         return this.subscriptionName;
+    }
+    public byte[] getSubscriptionNameB() {
+        return this.subscriptionName.getBytes();
     }
     public char[] getSubscriptionNameC() {
         return this.subscriptionName.toCharArray();
@@ -74,12 +104,34 @@ public class Subscription {
     public String getDateStarted() {
         return this.dateStarted;
     }
+    public byte[] getDateStartedB() {
+        return this.dateStarted.getBytes();
+    }
     public char[] getDateStartedC() {
         return this.dateStarted.toCharArray();
     }
     public int getDateStartedLength() { return this.dateStarted.length(); }
+    public Calendar getCalendar() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date theDate = simpleDateFormat.parse(this.dateStarted);
+        Calendar myCal = new GregorianCalendar();
+        myCal.setTime(theDate);
+        return myCal;
+    }
+    public int getYear() throws ParseException {
+        return this.getCalendar().get(Calendar.YEAR);
+    }
+    public int getMonth() throws ParseException {
+        return this.getCalendar().get(Calendar.MONTH);
+    }
+    public int getDayOfMonth() throws ParseException {
+        return this.getCalendar().get(Calendar.DAY_OF_MONTH);
+    }
     public String getMonthlyCharges() {
         return this.monthlyCharges;
+    }
+    public byte[] getMonthlyChargesB() {
+        return this.monthlyCharges.getBytes();
     }
     public char[] getMonthlyChargesC() {
         return this.monthlyCharges.toCharArray();
@@ -90,6 +142,9 @@ public class Subscription {
     public String getComments() {
         return this.comments;
     }
+    public byte[] getCommentsB() {
+        return this.comments.getBytes();
+    }
     public char[] getCommentsC() {
         return this.comments.toCharArray();
     }
@@ -97,4 +152,17 @@ public class Subscription {
         return this.comments.length();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(uuid);
+        parcel.writeString(subscriptionName);
+        parcel.writeString(dateStarted);
+        parcel.writeString(monthlyCharges);
+        parcel.writeString(comments);
+    }
 }
