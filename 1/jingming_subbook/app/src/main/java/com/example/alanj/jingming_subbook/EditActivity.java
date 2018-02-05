@@ -46,7 +46,7 @@ public class EditActivity extends AppCompatActivity {
         if (!subscription.setName(editName.getText().toString())) {
             return;
         }
-        if (!subscription.setStartedDate(String.valueOf(datePicker.getYear()), String.valueOf(datePicker.getMonth()), String.valueOf(datePicker.getDayOfMonth()))) {
+        if (!subscription.setStartedDate(String.valueOf(datePicker.getYear()), String.valueOf(datePicker.getMonth() + 1), String.valueOf(datePicker.getDayOfMonth()))) {
             return;
         }
         if (!subscription.setMonthlyCharges(editMonthlyCharges.getText().toString())) {
