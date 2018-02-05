@@ -26,6 +26,26 @@
             android:text="click to edit, hold to delete"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Monthly Charges (CAD):"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/totalMonthlyCharges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/newSuscriptionButton"
             android:layout_width="match_parent"
@@ -36,10 +56,11 @@
         <ListView
             android:id="@+id/mainListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteY="19dp" >
+            android:layout_height="442dp"
+            tools:layout_editor_absoluteY="19dp">
 
         </ListView>
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

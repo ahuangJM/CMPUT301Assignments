@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -18,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.EventListener;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<Subscription> subscriptionArrayAdapter;
     private ListView mainListView;
     private final String book = "jingming_subbook.txt";
+    TextView totalMonthlyCharges;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        this.totalMonthlyCharges = findViewById(R.id.totalMonthlyCharges);
     }
 
     private void writeToFile() {
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         FileInputStream fis;
         String line = "";
         String[] lineList;
+        Double totalMonthlyCharges = 0.0;
         this.subscriptions.clear();
         try {
             fis = openFileInput(this.book);
@@ -93,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 sub.setName(lineList[0]);
                 sub.setStartedDate(lineList[1]);
                 sub.setMonthlyCharges(lineList[2]);
+                totalMonthlyCharges += Double.parseDouble(sub.getMonthlyCharges());
                 sub.setComment(lineList[3]);
                 this.subscriptions.add(sub);
             }
             subscriptionArrayAdapter.notifyDataSetChanged();
+            this.totalMonthlyCharges.setText((new DecimalFormat("##.00")).format(totalMonthlyCharges).toString());
             fis.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -105,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         this.readFile();
     }
@@ -115,12 +122,16 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         switch(requestCode) {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     Subscription newSubscription = intent.getExtras().getParcelable("SUBSCRIPTION");
+                    if (newSubscription.getName() == null || newSubscription.getMonthlyCharges() == null ||
+                            newSubscription.getStartedDate() == null || newSubscription.getComment() == null) {
+                        return;
+                    }
                     subscriptions.add(newSubscription);
                     subscriptionArrayAdapter.notifyDataSetChanged();
                     this.writeToFile();
