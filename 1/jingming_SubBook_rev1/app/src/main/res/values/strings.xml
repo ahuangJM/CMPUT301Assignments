@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">jingming_SubBook_rev1</string>
-    <string name="monthly_charges_n_cad">Monthly Charges\n(CAD)</string>
-    <string name="date_started_n_yyyy_mm_dd">Date Started\n(yyyy-mm-dd)</string>
-    <string name="name">Name</string>
-    <string name="new_subscription">New Subscription</string>
-    <string name="comments">Comments</string>
-    <string name="confirm">Confirm</string>
-</resources>
